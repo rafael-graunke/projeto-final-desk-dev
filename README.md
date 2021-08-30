@@ -1,2 +1,2 @@
-# projeto-final-desk-dev
- Projeto de aula final (Desenvolvimento Desktop)
+# Projeto Final de Desenvolvimento Desktop
+Continuação do projeto final desenvolvido no decorrer da disciplina de desenvolvimento desktop.
