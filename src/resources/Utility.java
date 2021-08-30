@@ -39,7 +39,8 @@ public class Utility {
         return Integer.parseInt(input);
     }
 
-    public static Controller createNewWindow(String resource, String title, Controller controller, Controller main_controller, int width, int height) {
+    public static Controller createNewWindow(String resource, String title, Controller main_controller, int width, int height) {
+        Controller controller = new Controller();
         try {
             FXMLLoader loader = new FXMLLoader(controller.getClass().getResource(resource));
             Parent root = loader.load();

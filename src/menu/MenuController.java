@@ -63,22 +63,21 @@ public class MenuController extends Controller implements Initializable {
     }
 
     public void addBookWindow() {
-        Utility.createNewWindow("../add/add.fxml", "Adicionar um Livro", new AddController(), this, 690, 360);
+        Utility.createNewWindow("../add/add.fxml", "Adicionar um Livro",this, 690, 360);
     }
 
     public void searchBookWindow() {
-        Utility.createNewWindow("../search/search.fxml", "Pesquisar um Livro", new SearchController(), this,690, 420);
+        Utility.createNewWindow("../search/search.fxml", "Pesquisar um Livro", this,690, 420);
     }
 
     public void detailBookWindow() {
         if (getBookFromTable() != null) {
-            Controller controller = Utility.createNewWindow("../detail/detail.fxml", "Detalhes do Livro", new DetailController(), this, 690, 360);
+            Controller controller = Utility.createNewWindow("../detail/detail.fxml", "Detalhes do Livro", this, 690, 360);
             ((DetailController) controller).setSelectedBook(getBookFromTable());
             ((DetailController) controller).showDetails();
         } else {
             Utility.showError("Nenhum livro selecionado", "Você deve selecionar um livro da lista e então selecionar a opção de detalhes.");
         }
-
     }
 
     public void deleteBook() throws SQLException {
