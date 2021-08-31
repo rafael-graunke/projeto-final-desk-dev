@@ -26,6 +26,7 @@ public class DbController extends Controller implements Initializable {
 
     private final Image connection_ok = new Image("/resources/connection_ok.png");
     private final Image connection_error = new Image("/resources/connection_error.png");
+    private final Image connection_loading = new Image("/resources/connection_loading.gif");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,6 +34,8 @@ public class DbController extends Controller implements Initializable {
     }
 
     public boolean testConnection() {
+        image_field.setImage(connection_loading);
+
         ConnectionFactory.setIp(ip_field.getText());
         ConnectionFactory.setDb_name(name_field.getText());
         ConnectionFactory.setUser(user_field.getText());
