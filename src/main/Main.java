@@ -1,22 +1,15 @@
 package main;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import resources.Utility;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../menu/menu.fxml"));
-        primaryStage.setTitle("Banco de Livros");
-        primaryStage.setScene(new Scene(root, 805, 420));
-        primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("resources/book_database.png"));
-        primaryStage.show();
+    public void start(Stage primaryStage) {
+        //Utility.createNewWindow("../menu/menu.fxml", "Banco de Livros", new Controller(), 805, 420);
+        Utility.createNewWindow("../database/db.fxml", "Conexão com Banco", new Controller(), 300, 400);
     }
 
     public static void main(String[] args) {
