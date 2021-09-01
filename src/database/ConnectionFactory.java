@@ -10,29 +10,13 @@ public class ConnectionFactory {
 
     private static String ip, db_name, user, password;
 
-    public static Connection getConnection() {
-        try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://"+ ip +":3306/"+ db_name +"?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT",
-                    user,
-                    password);
-            return con;
-        } catch (SQLException e) {
-            Utility.showError("Erro de conexão com o banco","Não foi possível estabelecer uma conexão com o banco de dados.");
-        }
-        return null;
-    }
+    public static Connection getConnection() throws SQLException{
 
-    public static boolean testConnection() {
-        try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://"+ ip +":3306/"+ db_name +"?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT",
-                    user,
-                    password);
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
+        return DriverManager.getConnection("jdbc:mysql://"+ ip +":3306/"+ db_name + "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT",
+                user,
+                password);
     }
-
+    
     public static void setIp(String ip) {
         ConnectionFactory.ip = ip;
     }
@@ -50,7 +34,11 @@ public class ConnectionFactory {
     }
 
     public static void main(String[] args) {
-        getConnection();
+        try {
+            getConnection();
+        } catch (SQLException e) {
+            Utility.showError("Erro de conexão com o banco","Não foi possível estabelecer uma conexão com o banco de dados.");
+        }
     }
 
 }

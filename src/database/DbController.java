@@ -11,6 +11,7 @@ import main.Controller;
 import resources.Utility;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DbController extends Controller implements Initializable {
@@ -41,10 +42,11 @@ public class DbController extends Controller implements Initializable {
         ConnectionFactory.setUser(user_field.getText());
         ConnectionFactory.setPassword(password_field.getText());
 
-        if (ConnectionFactory.testConnection()) {
+        try{
+            ConnectionFactory.getConnection();
             image_field.setImage(connection_ok);
             return true;
-        } else {
+        } catch (SQLException e) {
             image_field.setImage(connection_error);
         }
         return false;
