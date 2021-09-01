@@ -8,29 +8,16 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    private static String ip, db_name, user, password;
+    private static String[] connectionData = new String[4];
 
-    public static Connection getConnection() throws SQLException{
-
-        return DriverManager.getConnection("jdbc:mysql://"+ ip +":3306/"+ db_name + "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT",
-                user,
-                password);
-    }
-    
-    public static void setIp(String ip) {
-        ConnectionFactory.ip = ip;
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:mysql://"+ connectionData[0] +":3306/"+ connectionData[1] +
+                                            "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT",
+                                            connectionData[2], connectionData[3]);
     }
 
-    public static void setDb_name(String db_name) {
-        ConnectionFactory.db_name = db_name;
-    }
-
-    public static void setUser(String user) {
-        ConnectionFactory.user = user;
-    }
-
-    public static void setPassword(String password) {
-        ConnectionFactory.password = password;
+    public static void setConnectionData(String[] connection_data) {
+        connectionData = connection_data;
     }
 
     public static void main(String[] args) {

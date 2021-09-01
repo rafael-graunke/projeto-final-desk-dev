@@ -21,7 +21,7 @@ public class DbController extends Controller implements Initializable {
     @FXML
     private PasswordField password_field;
     @FXML
-    private Button test_btn, cancel_btn, save_btn;
+    private Button cancel_btn;
     @FXML
     private ImageView image_field;
 
@@ -37,12 +37,10 @@ public class DbController extends Controller implements Initializable {
     public boolean testConnection() {
         image_field.setImage(connection_loading);
 
-        ConnectionFactory.setIp(ip_field.getText());
-        ConnectionFactory.setDb_name(name_field.getText());
-        ConnectionFactory.setUser(user_field.getText());
-        ConnectionFactory.setPassword(password_field.getText());
+        String[] connectionData = new String[] {ip_field.getText(), name_field.getText(), user_field.getText(), password_field.getText()};
+        ConnectionFactory.setConnectionData(connectionData);
 
-        try{
+        try {
             ConnectionFactory.getConnection();
             image_field.setImage(connection_ok);
             return true;
