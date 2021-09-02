@@ -45,11 +45,7 @@ public class SearchController extends Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //Cria Opções ChoiceBox
         search_options = FXCollections.observableArrayList();
-        search_options.add("ISBN");
-        search_options.add("Nome");
-        search_options.add("Autor");
-        search_options.add("Ano");
-        search_options.add("Editora");
+        search_options.addAll("ISBN", "Nome", "Autor", "Ano", "Editora");
         search_choice.setItems(search_options);
         search_choice.getSelectionModel().select(0);
 

@@ -49,7 +49,7 @@ public class DaoBook {
         while (rs.next()) {
             Book book = new Book(rs.getLong("isbn"), rs.getString("nome"),
                     rs.getString("autor"), rs.getInt("ano"), rs.getString("editora"));
-            
+
             books.add(book);
         }
 
