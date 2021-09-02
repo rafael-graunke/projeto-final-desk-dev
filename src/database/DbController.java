@@ -1,5 +1,6 @@
 package database;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,7 +22,7 @@ public class DbController extends Controller implements Initializable {
     @FXML
     private PasswordField password_field;
     @FXML
-    private Button cancel_btn;
+    private Button cancel_btn, save_btn;
     @FXML
     private ImageView image_field;
 
@@ -31,33 +32,39 @@ public class DbController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        save_btn.setDisable(true);
     }
 
-    public boolean testConnection() {
+    public void testConnection() {
+        save_btn.setDisable(true);
         image_field.setImage(connection_loading);
 
         String[] connectionData = new String[] {ip_field.getText(), name_field.getText(), user_field.getText(), password_field.getText()};
         ConnectionFactory.setConnectionData(connectionData);
 
-        try {
-            ConnectionFactory.getConnection();
-            image_field.setImage(connection_ok);
-            return true;
-        } catch (SQLException e) {
-            image_field.setImage(connection_error);
-        }
-        return false;
+        Task<Boolean> task = new Task<Boolean>() {
+            @Override
+            protected Boolean call() {
+                try {
+                    ConnectionFactory.getConnection();
+                    image_field.setImage(connection_ok);
+                    save_btn.setDisable(false);
+                    return true;
+                } catch (SQLException e) {
+                    image_field.setImage(connection_error);
+                }
+                return false;
+            }
+        };
+
+        Thread th = new Thread(task);
+        th.start();
     }
 
     public void saveConnection() {
-        if(testConnection()) {
-            //TODO: Salvar os dados de conexão ao banco em um arquivo
-            Utility.closeWindow(cancel_btn);
-            Utility.createNewWindow("../menu/menu.fxml", "Banco de Livros", this, 805, 420);
-        } else {
-            Utility.showError("Erro de conexão ao banco de dados", "Verifique os dados informado para a conexão.");
-        }
+        //TODO: Salvar os dados de conexão ao banco em um arquivo
+        Utility.closeWindow(cancel_btn);
+        Utility.createNewWindow("../menu/menu.fxml", "Banco de Livros", this, 805, 420);
     }
 
     public void cancel() {
