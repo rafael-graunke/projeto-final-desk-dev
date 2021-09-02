@@ -17,13 +17,8 @@ public class DaoBook {
              PreparedStatement stmt = connection.prepareStatement(SQLConst.SELECT_ALL);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Book book = new Book();
-
-                book.setIsbn(rs.getLong("isbn"));
-                book.setName(rs.getString("nome"));
-                book.setAuthor(rs.getString("autor"));
-                book.setYear(rs.getInt("ano"));
-                book.setPublisher(rs.getString("editora"));
+                Book book = new Book(rs.getLong("isbn"), rs.getString("nome"),
+                    rs.getString("autor"), rs.getInt("ano"), rs.getString("editora"));
                 books.add(book);
             }
         }
@@ -35,39 +30,26 @@ public class DaoBook {
 
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement stmt;
+        String query = String.format(SQLConst.SEARCH, mode);
+        stmt = connection.prepareStatement(query);
 
         switch (mode) {
             case "ISBN":
-                stmt = connection.prepareStatement(SQLConst.SEARCH_ISBN);
                 stmt.setLong(1, Utility.toLong(value));
                 break;
             case "Ano":
-                stmt = connection.prepareStatement(SQLConst.SEARCH_YEAR);
                 stmt.setInt(1, Utility.toInt(value));
                 break;
-            case "Nome":
-                stmt = connection.prepareStatement(SQLConst.SEARCH_NAME);
-                stmt.setString(1, value);
-                break;
-            case "Autor":
-                stmt = connection.prepareStatement(SQLConst.SEARCH_AUTHOR);
-                stmt.setString(1, value);
-                break;
             default:
-                stmt = connection.prepareStatement(SQLConst.SEARCH_PUBLISHER);
                 stmt.setString(1, value);
                 break;
         }
 
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            Book book = new Book();
-
-            book.setIsbn(rs.getLong("isbn"));
-            book.setName(rs.getString("nome"));
-            book.setAuthor(rs.getString("autor"));
-            book.setYear(rs.getInt("ano"));
-            book.setPublisher(rs.getString("editora"));
+            Book book = new Book(rs.getLong("isbn"), rs.getString("nome"),
+                    rs.getString("autor"), rs.getInt("ano"), rs.getString("editora"));
+            
             books.add(book);
         }
 
