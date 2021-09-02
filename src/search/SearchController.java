@@ -147,14 +147,9 @@ public class SearchController extends Controller implements Initializable {
 
     public void resetConfigs() {
         for (Node nd : field_reset) { nd.setDisable(true); }
-
-        for (TextField tf : text_fields_reset) {
-            tf.setEditable(false);
-            tf.setText("");
-        }
+        for (TextField tf : text_fields_reset) { tf.setEditable(false); tf.setText(""); }
         search_field.setText("");
 
-        //Seta Imagem ImageView
         Image image = new Image("resources/missing.png");
         image_field.setImage(image);
         image_field.setDisable(true);

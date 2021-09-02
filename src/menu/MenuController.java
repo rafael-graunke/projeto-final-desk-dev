@@ -1,6 +1,5 @@
 package menu;
 
-import add.AddController;
 import database.DaoBook;
 import database.Book;
 import detail.DetailController;
@@ -9,16 +8,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
 import main.Controller;
 import resources.Utility;
-import search.SearchController;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,6 +95,7 @@ public class MenuController extends Controller implements Initializable {
         bookData.add(book);
     }
 
+    @Override
     public void removeBookFromTable(Book book){
         Book bookOnTable = null;
         for (Book b : bookData) {

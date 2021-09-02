@@ -26,14 +26,12 @@ public class DetailController extends Controller implements Initializable {
     private Button back_btn;
 
     private Book selectedBook;
+    private TextField[] text_field_reset;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        isbn_field.setEditable(false);
-        name_field.setEditable(false);
-        author_field.setEditable(false);
-        year_field.setEditable(false);
-        publisher_field.setEditable(false);
+        text_field_reset = new TextField[] {isbn_field, name_field, author_field, year_field, publisher_field};
+        for (TextField tf : text_field_reset) {tf.setEditable(false);}
         }
 
     public void showDetails() {
