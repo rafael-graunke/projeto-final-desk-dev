@@ -57,6 +57,7 @@ public class Utility {
 
         } catch (IOException e) {
             showError("Erro ao abrir janela", "Um erro correu ao tentar abrir uma nova janela.");
+            e.printStackTrace();
         }
         return controller;
     }

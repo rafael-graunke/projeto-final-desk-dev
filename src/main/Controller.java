@@ -1,5 +1,7 @@
 package main;
 
+import database.Book;
+
 public class Controller {
 
     protected Controller main_controller;
@@ -8,4 +10,5 @@ public class Controller {
         main_controller = controller;
     }
 
+    public void removeBookFromTable(Book book) { }
 }

@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -38,12 +39,19 @@ public class SearchController extends Controller implements Initializable {
     @FXML
     private ImageView image_field;
 
+    //Arrays to iterate later on showBook()
+    private TextField[] text_fields_reset;
+    private Node[] field_reset = new Node[8];
+
     private List<Book> foundBooks;
     private int currentPosition = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //Cria Opções ChoiceBox
+
+        text_fields_reset = new TextField[]{isbn_field, name_field, author_field, year_field, publisher_field};
+        field_reset = new Node[] {isbn_field, name_field, author_field, year_field, publisher_field, delete_btn, previous_btn, next_btn};
+
         search_options = FXCollections.observableArrayList();
         search_options.addAll("ISBN", "Nome", "Autor", "Ano", "Editora");
         search_choice.setItems(search_options);
@@ -86,7 +94,7 @@ public class SearchController extends Controller implements Initializable {
         if (confirm) {
             Book book = DaoBook.searchBooks(isbn_field.getText(), "ISBN").get(0);
             if (book != null) {
-                ((MenuController) main_controller).removeBookFromTable(book);
+                main_controller.removeBookFromTable(book);
                 DaoBook.removeBook(book);
                 File file = new File("images/" + book.getIsbn() + ".jpg");
                 if (file.exists()) {
@@ -100,13 +108,7 @@ public class SearchController extends Controller implements Initializable {
     // Exibir o livro encontrado
     public void showBook(Book book) {
         if (book != null) {
-            delete_btn.setDisable(false);
-            isbn_field.setDisable(false);
-            name_field.setDisable(false);
-            author_field.setDisable(false);
-            year_field.setDisable(false);
-            publisher_field.setDisable(false);
-            image_field.setDisable(false);
+            for (Node nd : field_reset) { nd.setDisable(false); }
 
             File file = new File("images/" + book.getIsbn() + ".jpg");
 
@@ -144,28 +146,12 @@ public class SearchController extends Controller implements Initializable {
     }
 
     public void resetConfigs() {
+        for (Node nd : field_reset) { nd.setDisable(true); }
 
-        //Desabilita Botões
-        delete_btn.setDisable(true);
-        previous_btn.setDisable(true);
-        next_btn.setDisable(true);
-
-        //Desabilita Interação com TextField
-        isbn_field.setDisable(true);
-        isbn_field.setEditable(false);
-        isbn_field.setText("");
-        name_field.setDisable(true);
-        name_field.setEditable(false);
-        name_field.setText("");
-        author_field.setDisable(true);
-        author_field.setEditable(false);
-        author_field.setText("");
-        year_field.setDisable(true);
-        year_field.setEditable(false);
-        year_field.setText("");
-        publisher_field.setDisable(true);
-        publisher_field.setEditable(false);
-        publisher_field.setText("");
+        for (TextField tf : text_fields_reset) {
+            tf.setEditable(false);
+            tf.setText("");
+        }
         search_field.setText("");
 
         //Seta Imagem ImageView
