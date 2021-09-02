@@ -1,5 +1,7 @@
 package database;
 
+import resources.Utility;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,22 +31,46 @@ public class DaoBook {
     }
 
     public static List<Book> searchBooks(String value, String mode) throws SQLException{
-        String query = "SELECT * FROM " + ConnectionFactory.getConnectionData()[1] + ".biblioteca WHERE " + mode + " = '" + value + "';";
         List<Book> books = new ArrayList();
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                Book book = new Book();
 
-                book.setIsbn(rs.getLong("isbn"));
-                book.setName(rs.getString("nome"));
-                book.setAuthor(rs.getString("autor"));
-                book.setYear(rs.getInt("ano"));
-                book.setPublisher(rs.getString("editora"));
-                books.add(book);
-            }
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement stmt;
+
+        switch (mode) {
+            case "ISBN":
+                stmt = connection.prepareStatement(SQLConst.SEARCH_ISBN);
+                stmt.setLong(1, Utility.toLong(value));
+                break;
+            case "Ano":
+                stmt = connection.prepareStatement(SQLConst.SEARCH_YEAR);
+                stmt.setInt(1, Utility.toInt(value));
+                break;
+            case "Nome":
+                stmt = connection.prepareStatement(SQLConst.SEARCH_NAME);
+                stmt.setString(1, value);
+                break;
+            case "Autor":
+                stmt = connection.prepareStatement(SQLConst.SEARCH_AUTHOR);
+                stmt.setString(1, value);
+                break;
+            default:
+                stmt = connection.prepareStatement(SQLConst.SEARCH_PUBLISHER);
+                stmt.setString(1, value);
+                break;
         }
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Book book = new Book();
+
+            book.setIsbn(rs.getLong("isbn"));
+            book.setName(rs.getString("nome"));
+            book.setAuthor(rs.getString("autor"));
+            book.setYear(rs.getInt("ano"));
+            book.setPublisher(rs.getString("editora"));
+            books.add(book);
+        }
+
         if (books.isEmpty()){
             return null;
         }
