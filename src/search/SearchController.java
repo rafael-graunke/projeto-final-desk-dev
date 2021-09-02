@@ -61,7 +61,7 @@ public class SearchController extends Controller implements Initializable {
         String choice = search_choice.getSelectionModel().getSelectedItem();
 
         try {
-            List<Book> checkIfNotNull = DaoBook.searchBook(search_field.getText(), choice);
+            List<Book> checkIfNotNull = DaoBook.searchBooks(search_field.getText(), choice);
             if (checkIfNotNull != null) {
                 currentPosition = 0;
                 foundBooks = checkIfNotNull;
@@ -88,7 +88,7 @@ public class SearchController extends Controller implements Initializable {
         boolean confirm = Utility.showConfirmation("Confirmar Remoção", "Deseja excluir o livro selecionado?", "Após a exclusão não será possível recuperar o livro.");
 
         if (confirm) {
-            Book book = DaoBook.searchBook(isbn_field.getText(), "ISBN").get(0);
+            Book book = DaoBook.searchBooks(isbn_field.getText(), "ISBN").get(0);
             if (book != null) {
                 ((MenuController) main_controller).removeBookFromTable(book);
                 DaoBook.removeBook(book);

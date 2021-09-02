@@ -19,6 +19,7 @@ public class ConnectionFactory {
     public static void setConnectionData(String[] connection_data) {
         connectionData = connection_data;
     }
+    public static String[] getConnectionData () { return connectionData; }
 
     public static void main(String[] args) {
         try {

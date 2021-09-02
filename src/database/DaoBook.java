@@ -1,7 +1,5 @@
 package database;
 
-import resources.Utility;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +12,7 @@ public class DaoBook {
     public static List<Book> searchBooks() throws SQLException{
         List<Book> books = new ArrayList();
         try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(SQLConst.SEARCH);
+             PreparedStatement stmt = connection.prepareStatement(SQLConst.SELECT_ALL);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Book book = new Book();
@@ -30,61 +28,27 @@ public class DaoBook {
         return books;
     }
 
-    //Pesquisa Strings
-    public static List<Book> searchBook(String search, String mode) throws SQLException{
-        List<Book> books = searchBooks();
-        List<Book> foundBooks = new ArrayList<>();
+    public static List<Book> searchBooks(String value, String mode) throws SQLException{
+        String query = "SELECT * FROM " + ConnectionFactory.getConnectionData()[1] + ".biblioteca WHERE " + mode + " = '" + value + "';";
+        List<Book> books = new ArrayList();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Book book = new Book();
 
-        switch (mode) {
-            case "ISBN":
-                try {
-                    for (Book b : books) {
-                        if (b.getIsbn() == Utility.toLong(search))
-                            foundBooks.add(b);
-                    }
-                } catch (NumberFormatException e) {
-                    Utility.showError("Erro de pesquisa","O ISBN deve conter apenas números.");
-                }
-                break;
-
-            case "Nome":
-                for (Book b : books) {
-                    if (b.getName().equals(search))
-                        foundBooks.add(b);
-                }
-                break;
-
-            case "Autor":
-                for (Book b : books) {
-                    if (b.getAuthor().equals(search))
-                        foundBooks.add(b);
-                }
-                break;
-
-            case "Ano":
-                try {
-                    for (Book b : books) {
-                        if (b.getYear() == Utility.toInt(search))
-                            foundBooks.add(b);
-                    }
-                } catch (NumberFormatException e) {
-                    Utility.showError("Erro de pesquisa","O ano deve conter apenas números.");
-                }
-                break;
-
-            default:
-                for (Book b : books) {
-                    if (b.getPublisher().equals(search))
-                        foundBooks.add(b);
-                }
-
+                book.setIsbn(rs.getLong("isbn"));
+                book.setName(rs.getString("nome"));
+                book.setAuthor(rs.getString("autor"));
+                book.setYear(rs.getInt("ano"));
+                book.setPublisher(rs.getString("editora"));
+                books.add(book);
+            }
         }
-
-        if (foundBooks.isEmpty()) {
+        if (books.isEmpty()){
             return null;
-        } else {
-            return foundBooks;
         }
+        return books;
     }
 
     public static void addBook(Book book) throws SQLException {
