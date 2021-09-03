@@ -8,7 +8,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Utility.createNewWindow("../database/db.fxml", "Conexão com Banco", new Controller(), 300, 400);
+        Utility.createNewWindow("../database/db.fxml", "Conexão com Banco", new Controller(), 300, 286);
     }
 
     public static void main(String[] args) {
