@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import main.Controller;
 import resources.Utility;
 
+import java.io.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -39,6 +40,7 @@ public class DbController extends Controller implements Initializable {
         config_db.setFitWidth(30);
         config_db.setFitHeight(30);
         config_btn.setGraphic(config_db);
+
     }
 
     public void testConnection() {
@@ -76,8 +78,44 @@ public class DbController extends Controller implements Initializable {
 
     public void saveConnection() {
         //TODO: Salvar os dados de conexão ao banco em um arquivo
+        String[] connection_data = new String[] {ip, port, name, user_field.getText()};
+        File file = new File("connection.bin");
+        if (!file.exists()){
+            try{
+                file.createNewFile();
+            } catch (IOException e ){
+                Utility.showError("Erro ao salvar conexão", "Não foi possível salvar o arquivo de conexão");
+            }
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oss = new ObjectOutputStream(fos);
+            oss.writeObject(connection_data);
+            oss.close();
+        } catch (IOException e) {
+            Utility.showError("Erro ao salvar conexão", "Não foi possível salvar os dados de conexão no arquivo");
+        }
+
         Utility.closeWindow(cancel_btn);
         Utility.createNewWindow("../menu/menu.fxml", "Banco de Livros", this, 805, 420);
+    }
+
+    public void readConnection() {
+        File file = new File("connection.bin");
+        if (file.exists()) {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                String[] connection_data = (String[]) ois.readObject();
+                ip = connection_data[0];
+                //TODO: add port field
+                name = connection_data[2];
+                user_field.setText(connection_data[3]);
+            } catch (IOException | ClassNotFoundException e) {
+                Utility.showError("Erro ao ler dados de conexão", "Não foi possível ler o arquivo de conexão");
+                e.printStackTrace();
+            }
+        }
     }
 
     public void setIp(String ip) {this.ip = ip;}

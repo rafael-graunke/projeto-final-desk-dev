@@ -30,7 +30,7 @@ public class DaoBook {
 
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement stmt;
-        String query = String.format(SQLConst.SEARCH, mode);
+        String query = SQLConst.SEARCH.replace("teste", mode);
         stmt = connection.prepareStatement(query);
 
         switch (mode) {
